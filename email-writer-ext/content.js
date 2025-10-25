@@ -1,7 +1,30 @@
 console.log("ComposeAI extension - Content script loaded.");
 
-function injectButton(){
+function createAIButton(){
+    //TODO: Implement logic to create and return the AI Reply button element
+}
+function findComposeToolbar(){
+    //TODO: Implement logic to find the compose toolbar element
+}
 
+function injectButton(){
+    const existingButton = document.querySelector('.ai-reply-button');
+    if(existingButton) existingButton.remove();
+
+    const toolbar = findComposeToolbar();
+    if(!toolbar){
+        console.log("ComposeAI extension - Compose toolbar not found.");
+        return;
+    }
+    console.log("ComposeAI extension - Toolbar found!, Injecting AI Reply button.");
+    const button = createAIButton();
+    button.classList.add('ai-reply-button');
+
+    button.addEventListener('click', async()=>{
+        //TODO: Implement AI reply functionality
+    });
+
+    toolbar.insertBefore(button, toolbar.firstChild);
 }
 
 const observer = new MutationObserver((mutations)=>{
@@ -21,4 +44,4 @@ const observer = new MutationObserver((mutations)=>{
 observer.observe(document.body, {
     childList: true,
     subtree: true
-})
+});
