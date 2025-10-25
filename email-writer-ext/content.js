@@ -1,10 +1,29 @@
 console.log("ComposeAI extension - Content script loaded.");
 
 function createAIButton(){
-    //TODO: Implement logic to create and return the AI Reply button element
+    const button = document.createElement('div');
+    button.className = 'T-I J-J5-Ji aoO v7 T-I-atl L3';
+    button.style.marginRight = '8px';
+    button.innerHTML = 'AI Reply';
+    button.setAttribute('role', 'button');
+    button.setAttribute('data-tooltip', 'Generate AI Reply');
+    return button;
 }
 function findComposeToolbar(){
-    //TODO: Implement logic to find the compose toolbar element
+    const selectors = [
+        '.btC',
+        '.aDh', 
+        '[role="toolbar"]',
+        '.gU.Up'
+    ];
+
+    for(const selector of selectors){
+        const toolbar = document.querySelector(selector);
+        if(toolbar){
+            return toolbar;
+        }
+        return null;
+    }
 }
 
 function injectButton(){
