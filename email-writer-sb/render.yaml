@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: email-writer-backend
+    env: docker
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: GEMINI_URL
+        sync: false
+      - key: GEMINI_KEY
+        sync: false
