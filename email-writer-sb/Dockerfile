@@ -1,23 +1,26 @@
-# ---- Stage 1: Build the JAR ----
-FROM maven:3.9.6-eclipse-temurin-21 AS builder
+# Use the official Maven image to build the app
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# Copy Maven config and source
+# Copy pom.xml and download dependencies
 COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Copy the rest of the source code
 COPY src ./src
 
-# Build the JAR, ignore compiler release warnings
-RUN mvn clean package -DskipTests || true
+# Package the application (skipping tests for faster build)
+RUN mvn clean package -DskipTests
 
-# ---- Stage 2: Run the JAR ----
+# Use a smaller Java runtime image
 FROM eclipse-temurin:21-jdk
 WORKDIR /app
 
-# Copy the JAR from the builder stage
-COPY --from=builder /app/target/*.jar app.jar
+# Copy the jar file from the build stage
+COPY --from=build /app/target/*.jar app.jar
 
-# Expose port (Render sets PORT automatically)
+# Expose the port (Render uses 8080 automatically)
 EXPOSE 8080
 
-# Start the application
+# Run the Spring Boot app
 ENTRYPOINT ["java", "-jar", "app.jar"]
